@@ -657,6 +657,59 @@
     		</Setter.Value>
     	</Setter>
     </Style>
+    <Style x:Key="StopButton" TargetType="{x:Type Button}">
+    	<Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}"/>
+    	<Setter Property="Background" Value="{StaticResource ButtonNormalBackground}"/>
+    	<Setter Property="BorderBrush" Value="{StaticResource ButtonNormalBorder}"/>
+    	<Setter Property="BorderThickness" Value="1"/>
+    	<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+    	<Setter Property="HorizontalContentAlignment" Value="Center"/>
+    	<Setter Property="VerticalContentAlignment" Value="Center"/>
+    	<Setter Property="Padding" Value="1"/>
+    	<Setter Property="Template">
+    		<Setter.Value>
+    			<ControlTemplate TargetType="{x:Type Button}">
+    				<Grid>
+    					<VisualStateManager.VisualStateGroups>
+    						<VisualStateGroup x:Name="CommonStates">
+    							<VisualState x:Name="Normal"/>
+    							<VisualState x:Name="MouseOver">
+    								<Storyboard>
+    									<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)" Storyboard.TargetName="border">
+    										<EasingColorKeyFrame KeyTime="0" Value="Gray"/>
+    									</ColorAnimationUsingKeyFrames>
+    								</Storyboard>
+    							</VisualState>
+    							<VisualState x:Name="Pressed">
+    								<Storyboard>
+    									<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="path">
+    										<EasingColorKeyFrame KeyTime="0" Value="#FF5B5B5B"/>
+    									</ColorAnimationUsingKeyFrames>
+    								</Storyboard>
+    							</VisualState>
+    							<VisualState x:Name="Disabled"/>
+    						</VisualStateGroup>
+    					</VisualStateManager.VisualStateGroups>
+    					<Path x:Name="path" Fill="Black" Margin="5">
+    						<Path.Data>
+    							<PathGeometry Figures="M 0,0 L 0,20 20,20 20,0 Z"/>
+    						</Path.Data>
+    					</Path>
+    					<Border x:Name="border" BorderBrush="#00808080" BorderThickness="3" HorizontalAlignment="Stretch" Height="Auto" VerticalAlignment="Stretch" Width="Auto" Margin="2"/>
+
+    				</Grid>
+
+    				<ControlTemplate.Triggers>
+    					<Trigger Property="IsKeyboardFocused" Value="true"/>
+    					<Trigger Property="ToggleButton.IsChecked" Value="true"/>
+    					<Trigger Property="IsEnabled" Value="false">
+    						<Setter Property="Foreground" Value="#ADADAD"/>
+    					</Trigger>
+    				</ControlTemplate.Triggers>
+    			</ControlTemplate>
+    		</Setter.Value>
+    	</Setter>
+    </Style>
 
 
     </Application.Resources>
