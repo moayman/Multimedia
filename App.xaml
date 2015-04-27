@@ -471,7 +471,7 @@
 				<Setter Property="Template">
 					<Setter.Value>
 						<ControlTemplate TargetType="{x:Type Button}">
-							<Border x:Name="border" BorderBrush="{x:Null}" BorderThickness="1" Margin="0" Height="Auto" Background="#00000000">
+							<Border x:Name="border" BorderBrush="#00000000" BorderThickness="1" Margin="0" Height="Auto" Background="#00000000">
 								<VisualStateManager.VisualStateGroups>
 									<VisualStateGroup x:Name="CommonStates">
 										<VisualState x:Name="Normal"/>
@@ -479,6 +479,9 @@
 											<Storyboard>
 												<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="textBlock">
 													<EasingColorKeyFrame KeyTime="0" Value="#FF5B5B5B"/>
+												</ColorAnimationUsingKeyFrames>
+												<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)" Storyboard.TargetName="border">
+													<EasingColorKeyFrame KeyTime="0" Value="Black"/>
 												</ColorAnimationUsingKeyFrames>
 											</Storyboard>
 										</VisualState>
@@ -505,5 +508,156 @@
 					</Setter.Value>
 				</Setter>
 			</Style>
+
+
+
+
+
+			<Style x:Key="SliderRepeatButton2" TargetType="RepeatButton">
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="IsTabStop" Value="false" />
+        <Setter Property="Focusable" Value="false" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RepeatButton">
+                    <Border  BorderThickness="0,0,0,1" BorderBrush="{x:Null}" Background="{x:Null}" Height="3"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="SliderRepeatButton3" TargetType="RepeatButton">
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RepeatButton">
+                    <Border SnapsToDevicePixels="True" Background="{x:Null}"  BorderThickness="0" BorderBrush="{x:Null}" Height="3"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="SliderThumb1" TargetType="Thumb">
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Thumb">
+					<StackPanel Orientation="Vertical" Background="#00000000">
+                		<VisualStateManager.VisualStateGroups>
+                			<VisualStateGroup x:Name="CommonStates">
+                				<VisualState x:Name="Normal"/>
+                				<VisualState x:Name="MouseOver">
+                					<Storyboard>
+                						<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.StrokeThickness)" Storyboard.TargetName="path">
+                							<EasingDoubleKeyFrame KeyTime="0" Value="2"/>
+                						</DoubleAnimationUsingKeyFrames>
+                					</Storyboard>
+                				</VisualState>
+                				<VisualState x:Name="Pressed">
+                					<Storyboard>
+                						<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="path">
+                							<EasingColorKeyFrame KeyTime="0" Value="#FF8D8D8D"/>
+                						</ColorAnimationUsingKeyFrames>
+                					</Storyboard>
+                				</VisualState>
+                				<VisualState x:Name="Disabled"/>
+                			</VisualStateGroup>
+                		</VisualStateManager.VisualStateGroups>
+                		<Path x:Name="path" Data="M 0 0 L 8 0 L 4 6 Z"  Stroke="Black" Margin="-2,1,0,0" StrokeThickness="1" Fill="Gray"/>
+                		<Line X1="0" Y1="0" X2="0" Y2="10" Stroke="Gray" StrokeThickness="1" Margin="2,0,0,0" StrokeDashArray="3,3"/>
+						<Line X1="0" Y1="0" X2="0" Y2="10" Stroke="Gray" StrokeThickness="1" Margin="2,1,0,0" StrokeDashArray="3,3"/>
+                	</StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <ControlTemplate x:Key="Slider1"  TargetType="Slider">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Track Grid.Row="1" x:Name="PART_Track"   >
+                <Track.DecreaseRepeatButton>
+                    <RepeatButton Style="{StaticResource SliderRepeatButton3}"  Command="Slider.DecreaseLarge" />
+                </Track.DecreaseRepeatButton>
+                <Track.Thumb>
+                    <Thumb Style="{StaticResource SliderThumb1}"  />
+                </Track.Thumb>
+                <Track.IncreaseRepeatButton>
+                    <RepeatButton Style="{StaticResource SliderRepeatButton2}" Command="Slider.IncreaseLarge" />
+                </Track.IncreaseRepeatButton>
+            </Track>
+        </Grid>            
+    </ControlTemplate>
+
+    <Style x:Key="Horizontal_Slider1" TargetType="Slider">
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Style.Triggers>
+            <Trigger Property="Orientation" Value="Horizontal">
+                <Setter Property="MinHeight" Value="21" />
+                <Setter Property="MinWidth" Value="104" />
+                <Setter Property="Template" Value="{StaticResource Slider1}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="NormalButton" TargetType="{x:Type Button}">
+    	<Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}"/>
+    	<Setter Property="Background" Value="{StaticResource ButtonNormalBackground}"/>
+    	<Setter Property="BorderBrush" Value="{StaticResource ButtonNormalBorder}"/>
+    	<Setter Property="BorderThickness" Value="1"/>
+    	<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+    	<Setter Property="HorizontalContentAlignment" Value="Center"/>
+    	<Setter Property="VerticalContentAlignment" Value="Center"/>
+    	<Setter Property="Padding" Value="1"/>
+    	<Setter Property="Template">
+    		<Setter.Value>
+    			<ControlTemplate TargetType="{x:Type Button}">
+    				<Border x:Name="border" BorderBrush="#00000000" BorderThickness="2" Margin="0" Height="Auto" Background="#00000000">
+    					<VisualStateManager.VisualStateGroups>
+    						<VisualStateGroup x:Name="CommonStates">
+    							<VisualState x:Name="Normal"/>
+    							<VisualState x:Name="MouseOver">
+    								<Storyboard>
+    									<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="textBlock">
+    										<EasingColorKeyFrame KeyTime="0" Value="#FF5B5B5B"/>
+    									</ColorAnimationUsingKeyFrames>
+    									<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)" Storyboard.TargetName="border">
+    										<EasingColorKeyFrame KeyTime="0" Value="Black"/>
+    									</ColorAnimationUsingKeyFrames>
+    									<ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderThickness)" Storyboard.TargetName="border">
+    										<EasingThicknessKeyFrame KeyTime="0" Value="2"/>
+    									</ThicknessAnimationUsingKeyFrames>
+    								</Storyboard>
+    							</VisualState>
+    							<VisualState x:Name="Pressed">
+    								<Storyboard>
+    									<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="border">
+    										<EasingColorKeyFrame KeyTime="0" Value="#FF5B5B5B"/>
+    									</ColorAnimationUsingKeyFrames>
+    								</Storyboard>
+    							</VisualState>
+    							<VisualState x:Name="Disabled"/>
+    						</VisualStateGroup>
+    					</VisualStateManager.VisualStateGroups>
+    					<TextBlock x:Name="textBlock" TextWrapping="Wrap" Text="{TemplateBinding Content}" FontSize="21.333" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" Margin="0,3,0,-3"/>
+    				</Border>
+    				<ControlTemplate.Triggers>
+    					<Trigger Property="IsKeyboardFocused" Value="true"/>
+    					<Trigger Property="ToggleButton.IsChecked" Value="true"/>
+    				</ControlTemplate.Triggers>
+    			</ControlTemplate>
+    		</Setter.Value>
+    	</Setter>
+    </Style>
+
+
     </Application.Resources>
 </Application>
