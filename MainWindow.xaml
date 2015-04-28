@@ -2,11 +2,11 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="WAV to MP3 Converter"
-        Width="525"
-        Height="416"
+        Width="800"
+        Height="600"
         MinWidth="800"
         MinHeight="600"
-        Icon="icon.png">
+        Icon="icon.png" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Storyboard x:Key="Loading" RepeatBehavior="Forever">
             <ColorAnimationUsingKeyFrames Storyboard.TargetName="ellipse16" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
@@ -145,7 +145,7 @@
                     Style="{DynamicResource NormalButton}" />
             <Label x:Name="lblProgress"
                    Margin="10,0,225,0"
-                   HorizontalAlignment="Center"
+                   HorizontalAlignment="Right"
                    VerticalAlignment="Top"
                    Content="0:00"
                    FontSize="21.333" />
@@ -163,23 +163,30 @@
                    VerticalAlignment="Top"
                    Content="From: 0:00" />
             <Button x:Name="btnStop"
-            	Width="25"
-            	Height="25"
-            	Margin="0,13,185,0"
+                    Width="25"
+                    Height="25"
+                    Margin="0,13,185,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Content="Button"
+                    IsEnabled="False"
+                    RenderTransformOrigin="0.5,0.5"
+                    Style="{DynamicResource StopButton}">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform />
+                        <SkewTransform />
+                        <RotateTransform Angle="-180" />
+                        <TranslateTransform />
+                    </TransformGroup>
+                </Button.RenderTransform>
+            </Button>
+            <Label x:Name="lblSongName"
+            	Margin="0,0,279.123,0"
             	HorizontalAlignment="Right"
             	VerticalAlignment="Top"
-            	Content="Button"
-            	RenderTransformOrigin="0.5,0.5"
-            	Style="{DynamicResource StopButton}" IsEnabled="False">
-            	<Button.RenderTransform>
-            		<TransformGroup>
-            			<ScaleTransform />
-            			<SkewTransform />
-            			<RotateTransform Angle="-180" />
-            			<TranslateTransform />
-            		</TransformGroup>
-            	</Button.RenderTransform>
-            </Button>
+            	Content=""
+            	FontSize="21.333" Width="502.876" />
         </Grid>
         <Grid x:Name="FolderSelect"
               Height="49"
@@ -214,10 +221,29 @@
         </Grid>
         <DataGrid x:Name="datagridPlaylistInfo"
                   Margin="10,55,10,145"
+                  AutoGenerateColumns="False"
                   CanUserAddRows="False"
                   IsEnabled="False"
                   IsReadOnly="True"
-                  ItemsSource="{Binding}" />
+                  ItemsSource="{Binding}"
+				  
+                  MouseDoubleClick="datagridPlaylistInfo_MouseDoubleClick" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}" Style="{DynamicResource DataGridStyle}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding FilePath}" Visibility="Hidden" />
+                <DataGridTextColumn Binding="{Binding Name}" Header="Name" />
+                <DataGridTextColumn Binding="{Binding Artist}" Header="Artist" />
+                <DataGridTextColumn Binding="{Binding Album}" Header="Album" />
+                <DataGridTextColumn Binding="{Binding Year}" Header="Year" />
+                <DataGridTextColumn Binding="{Binding Genre}" Header="Genre" />
+                <DataGridTextColumn Binding="{Binding Format}" Header="Format" />
+                <DataGridTextColumn Binding="{Binding Duration}" Header="Duration" />
+                <DataGridTextColumn Binding="{Binding Size}" Header="Size" />
+                <DataGridTextColumn Binding="{Binding Bitrate}" Header="Bitrate" />
+                <DataGridTextColumn Binding="{Binding SampleRate}" Header="SampleRate" />
+                <DataGridTextColumn Binding="{Binding Channels}" Header="Channels" />
+            </DataGrid.Columns>
+        </DataGrid>
+
         <Grid x:Name="LoadingGrid"
               Width="402.5"
               Height="60"

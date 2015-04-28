@@ -19,6 +19,7 @@ using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using System.Threading;
 using System.Windows.Threading;
 using System.Windows.Media.Animation;
+using NAudio.Wave;
 
 namespace multimedia
 {
@@ -27,6 +28,9 @@ namespace multimedia
     /// </summary>
     public partial class MainWindow : Window
     {
+        IWavePlayer waveOutDevice;
+        AudioFileReader audioFileReader;
+
         List<DataItem> PlaylistData = new List<DataItem>();
         public MainWindow()
         {
@@ -77,6 +81,7 @@ namespace multimedia
                             filesize = Math.Round(filesize, 2);
                             PlaylistData.Add(new DataItem
                             {
+                                FilePath = file,
                                 Name = fileinfo.Properties.GetProperty(SystemProperties.System.Title).ValueAsObject.ToString(),
                                 Artist = fileinfo.Properties.GetProperty(SystemProperties.System.Music.DisplayArtist).ValueAsObject.ToString(),
                                 Album = fileinfo.Properties.GetProperty(SystemProperties.System.Music.AlbumTitle).ValueAsObject.ToString(),
@@ -104,9 +109,27 @@ namespace multimedia
                 }).Start();
             }
         }
+
+        private void datagridPlaylistInfo_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+//            if(waveOutDevice != null)
+//            {
+//                waveOutDevice.Stop();
+//                waveOutDevice.Dispose();
+//                audioFileReader.Dispose();
+//            }
+//
+//            waveOutDevice = new WaveOut();
+//            audioFileReader = new AudioFileReader("test.mp3");
+//
+//            waveOutDevice.Init(audioFileReader);
+//            //set sliders
+//            waveOutDevice.Play();
+        }
     }
     public class DataItem
     {
+        public string FilePath { get; set; }
         public string Name { get; set; }
         public string Artist { get; set; }
         public string Album { get; set; }
