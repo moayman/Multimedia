@@ -31,6 +31,18 @@
             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="btnPause" Storyboard.TargetProperty="(UIElement.Visibility)">
                 <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}" />
             </ObjectAnimationUsingKeyFrames>
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="sliderProgress">
+            	<DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
+            </BooleanAnimationUsingKeyFrames>
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="sliderFrom">
+            	<DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
+            </BooleanAnimationUsingKeyFrames>
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="sliderTo">
+            	<DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
+            </BooleanAnimationUsingKeyFrames>
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="btnConvert">
+            	<DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
+            </BooleanAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="Pause">
             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="btnPlay" Storyboard.TargetProperty="(UIElement.Visibility)">
@@ -40,7 +52,62 @@
                 <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}" />
             </ObjectAnimationUsingKeyFrames>
         </Storyboard>
+        <Storyboard x:Key="EnablePlayer">
+        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="btnPlay">
+        		<DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
+        	</BooleanAnimationUsingKeyFrames>
+        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="btnNext">
+        		<DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
+        	</BooleanAnimationUsingKeyFrames>
+        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="btnPrev">
+        		<DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
+        	</BooleanAnimationUsingKeyFrames>
+        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="btnPause">
+        		<DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
+        	</BooleanAnimationUsingKeyFrames>
+        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="btnStop">
+        		<DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
+        	</BooleanAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="DisablePlayer">
+        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="btnPlay">
+        		<DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
+        	</BooleanAnimationUsingKeyFrames>
+        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="btnNext">
+        		<DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
+        	</BooleanAnimationUsingKeyFrames>
+        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="btnPrev">
+        		<DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
+        	</BooleanAnimationUsingKeyFrames>
+        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="btnPause">
+        		<DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
+        	</BooleanAnimationUsingKeyFrames>
+        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="btnStop">
+        		<DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
+        	</BooleanAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="Stop">
+        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="sliderProgress">
+        		<DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
+        	</BooleanAnimationUsingKeyFrames>
+        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="sliderFrom">
+        		<DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
+        	</BooleanAnimationUsingKeyFrames>
+        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="sliderTo">
+        		<DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
+        	</BooleanAnimationUsingKeyFrames>
+        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="btnConvert">
+        		<DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
+        	</BooleanAnimationUsingKeyFrames>
+        </Storyboard>
     </Window.Resources>
+	<Window.Triggers>
+		<EventTrigger RoutedEvent="FrameworkElement.Loaded">
+			<BeginStoryboard x:Name="EnablePlayer_BeginStoryboard" Storyboard="{StaticResource EnablePlayer}"/>
+			<BeginStoryboard Storyboard="{StaticResource DisablePlayer}"/>
+			<BeginStoryboard Storyboard="{StaticResource Stop}"/>
+		</EventTrigger>
+	</Window.Triggers>
     <Grid>
         <Grid x:Name="PlayerAndConverter"
               Height="119.14"
