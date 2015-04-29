@@ -6,7 +6,8 @@
         Height="600"
         MinWidth="800"
         MinHeight="600"
-        Icon="icon.png" WindowStartupLocation="CenterScreen">
+        Icon="icon.png"
+        WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Storyboard x:Key="Loading" RepeatBehavior="Forever">
             <ColorAnimationUsingKeyFrames Storyboard.TargetName="ellipse16" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
@@ -31,17 +32,14 @@
             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="btnPause" Storyboard.TargetProperty="(UIElement.Visibility)">
                 <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}" />
             </ObjectAnimationUsingKeyFrames>
-            <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="sliderProgress">
-            	<DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetName="sliderProgress" Storyboard.TargetProperty="(UIElement.IsEnabled)">
+                <DiscreteBooleanKeyFrame KeyTime="0" Value="True" />
             </BooleanAnimationUsingKeyFrames>
-            <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="sliderFrom">
-            	<DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetName="sliderFrom" Storyboard.TargetProperty="(UIElement.IsEnabled)">
+                <DiscreteBooleanKeyFrame KeyTime="0" Value="True" />
             </BooleanAnimationUsingKeyFrames>
-            <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="sliderTo">
-            	<DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
-            </BooleanAnimationUsingKeyFrames>
-            <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="btnConvert">
-            	<DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetName="sliderTo" Storyboard.TargetProperty="(UIElement.IsEnabled)">
+                <DiscreteBooleanKeyFrame KeyTime="0" Value="True" />
             </BooleanAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="Pause">
@@ -53,61 +51,67 @@
             </ObjectAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="EnablePlayer">
-        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="btnPlay">
-        		<DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
-        	</BooleanAnimationUsingKeyFrames>
-        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="btnNext">
-        		<DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
-        	</BooleanAnimationUsingKeyFrames>
-        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="btnPrev">
-        		<DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
-        	</BooleanAnimationUsingKeyFrames>
-        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="btnPause">
-        		<DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
-        	</BooleanAnimationUsingKeyFrames>
-        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="btnStop">
-        		<DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
-        	</BooleanAnimationUsingKeyFrames>
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetName="btnPlay" Storyboard.TargetProperty="(UIElement.IsEnabled)">
+                <DiscreteBooleanKeyFrame KeyTime="0" Value="True" />
+            </BooleanAnimationUsingKeyFrames>
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetName="btnNext" Storyboard.TargetProperty="(UIElement.IsEnabled)">
+                <DiscreteBooleanKeyFrame KeyTime="0" Value="True" />
+            </BooleanAnimationUsingKeyFrames>
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetName="btnPrev" Storyboard.TargetProperty="(UIElement.IsEnabled)">
+                <DiscreteBooleanKeyFrame KeyTime="0" Value="True" />
+            </BooleanAnimationUsingKeyFrames>
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetName="btnPause" Storyboard.TargetProperty="(UIElement.IsEnabled)">
+                <DiscreteBooleanKeyFrame KeyTime="0" Value="True" />
+            </BooleanAnimationUsingKeyFrames>
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetName="btnStop" Storyboard.TargetProperty="(UIElement.IsEnabled)">
+                <DiscreteBooleanKeyFrame KeyTime="0" Value="True" />
+            </BooleanAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="DisablePlayer">
-        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="btnPlay">
-        		<DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
-        	</BooleanAnimationUsingKeyFrames>
-        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="btnNext">
-        		<DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
-        	</BooleanAnimationUsingKeyFrames>
-        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="btnPrev">
-        		<DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
-        	</BooleanAnimationUsingKeyFrames>
-        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="btnPause">
-        		<DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
-        	</BooleanAnimationUsingKeyFrames>
-        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="btnStop">
-        		<DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
-        	</BooleanAnimationUsingKeyFrames>
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetName="btnPlay" Storyboard.TargetProperty="(UIElement.IsEnabled)">
+                <DiscreteBooleanKeyFrame KeyTime="0" Value="False" />
+            </BooleanAnimationUsingKeyFrames>
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetName="btnNext" Storyboard.TargetProperty="(UIElement.IsEnabled)">
+                <DiscreteBooleanKeyFrame KeyTime="0" Value="False" />
+            </BooleanAnimationUsingKeyFrames>
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetName="btnPrev" Storyboard.TargetProperty="(UIElement.IsEnabled)">
+                <DiscreteBooleanKeyFrame KeyTime="0" Value="False" />
+            </BooleanAnimationUsingKeyFrames>
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetName="btnPause" Storyboard.TargetProperty="(UIElement.IsEnabled)">
+                <DiscreteBooleanKeyFrame KeyTime="0" Value="False" />
+            </BooleanAnimationUsingKeyFrames>
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetName="btnStop" Storyboard.TargetProperty="(UIElement.IsEnabled)">
+                <DiscreteBooleanKeyFrame KeyTime="0" Value="False" />
+            </BooleanAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="Stop">
-        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="sliderProgress">
-        		<DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
-        	</BooleanAnimationUsingKeyFrames>
-        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="sliderFrom">
-        		<DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
-        	</BooleanAnimationUsingKeyFrames>
-        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="sliderTo">
-        		<DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
-        	</BooleanAnimationUsingKeyFrames>
-        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="btnConvert">
-        		<DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
-        	</BooleanAnimationUsingKeyFrames>
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetName="sliderProgress" Storyboard.TargetProperty="(UIElement.IsEnabled)">
+                <DiscreteBooleanKeyFrame KeyTime="0" Value="False" />
+            </BooleanAnimationUsingKeyFrames>
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetName="sliderFrom" Storyboard.TargetProperty="(UIElement.IsEnabled)">
+                <DiscreteBooleanKeyFrame KeyTime="0" Value="False" />
+            </BooleanAnimationUsingKeyFrames>
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetName="sliderTo" Storyboard.TargetProperty="(UIElement.IsEnabled)">
+                <DiscreteBooleanKeyFrame KeyTime="0" Value="False" />
+            </BooleanAnimationUsingKeyFrames>
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetName="btnConvert" Storyboard.TargetProperty="(UIElement.IsEnabled)">
+                <DiscreteBooleanKeyFrame KeyTime="0" Value="False" />
+            </BooleanAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="btnPlay" Storyboard.TargetProperty="(UIElement.Visibility)">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}" />
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="btnPause" Storyboard.TargetProperty="(UIElement.Visibility)">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}" />
+            </ObjectAnimationUsingKeyFrames>
         </Storyboard>
     </Window.Resources>
-	<Window.Triggers>
-		<EventTrigger RoutedEvent="FrameworkElement.Loaded">
-			<BeginStoryboard x:Name="EnablePlayer_BeginStoryboard" Storyboard="{StaticResource EnablePlayer}"/>
-			<BeginStoryboard Storyboard="{StaticResource DisablePlayer}"/>
-			<BeginStoryboard Storyboard="{StaticResource Stop}"/>
-		</EventTrigger>
-	</Window.Triggers>
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard x:Name="EnablePlayer_BeginStoryboard" Storyboard="{StaticResource EnablePlayer}" />
+            <BeginStoryboard Storyboard="{StaticResource DisablePlayer}" />
+            <BeginStoryboard Storyboard="{StaticResource Stop}" />
+        </EventTrigger>
+    </Window.Triggers>
     <Grid>
         <Grid x:Name="PlayerAndConverter"
               Height="119.14"
@@ -123,6 +127,7 @@
                     Margin="0,0,65,0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
+                    Click="btnPlay_Click"
                     Content="Button"
                     IsEnabled="False"
                     Style="{DynamicResource PlayButton}" />
@@ -134,7 +139,7 @@
                     VerticalAlignment="Top"
                     Content="Button"
                     IsEnabled="False"
-                    Style="{DynamicResource NextButton}" />
+                    Style="{DynamicResource NextButton}" Click="btnNext_Click" />
             <Button x:Name="btnPrev"
                     Width="50"
                     Height="50"
@@ -144,7 +149,7 @@
                     Content="Button"
                     IsEnabled="False"
                     RenderTransformOrigin="0.5,0.5"
-                    Style="{DynamicResource NextButton}">
+                    Style="{DynamicResource NextButton}" Click="btnPrev_Click">
                 <Button.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform />
@@ -160,6 +165,7 @@
                     Margin="0,0,65,0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
+                    Click="btnPause_Click"
                     Content="Button"
                     IsEnabled="False"
                     Style="{DynamicResource PauseButton}"
@@ -169,11 +175,16 @@
                     Margin="10,32.306,225,0"
                     VerticalAlignment="Top"
                     IsEnabled="False"
-                    Style="{DynamicResource Horizontal_Slider}" />
+                    Maximum="1"
+                    Style="{DynamicResource Horizontal_Slider}"
+                    Thumb.DragCompleted="sliderProgress_DragCompleted"
+                    Thumb.DragStarted="sliderProgress_DragStarted"
+                    ValueChanged="sliderProgress_ValueChanged" />
             <Slider x:Name="sliderFrom"
                     Margin="10,53.306,225,0"
                     VerticalAlignment="Top"
                     IsEnabled="False"
+                    Maximum="1"
                     RenderTransformOrigin="0.5,0.5"
                     Style="{DynamicResource Horizontal_Slider1}">
                 <Slider.RenderTransform>
@@ -189,9 +200,10 @@
                     Margin="10,53.306,225,0"
                     VerticalAlignment="Top"
                     IsEnabled="False"
+                    Maximum="1"
                     RenderTransformOrigin="0.5,0.5"
                     Style="{DynamicResource Horizontal_Slider1}"
-                    Value="10">
+                    Value="1">
                 <Slider.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleX="1" ScaleY="-1" />
@@ -210,31 +222,34 @@
                     Content="Convert"
                     IsEnabled="False"
                     Style="{DynamicResource NormalButton}" />
-            <Label x:Name="lblProgress"
-                   Margin="10,0,225,0"
-                   HorizontalAlignment="Right"
-                   VerticalAlignment="Top"
-                   Content="0:00"
-                   FontSize="21.333" />
-            <Label x:Name="lblTo"
-                   Width="110"
-                   Margin="0,88.18,225,0"
-                   HorizontalAlignment="Right"
-                   VerticalAlignment="Top"
-                   Content="To: 0:00"
-                   FlowDirection="RightToLeft" />
-            <Label x:Name="lblFrom"
-                   Width="110"
-                   Margin="10,88.18,0,0"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Top"
-                   Content="From: 0:00" />
+            <TextBlock x:Name="txtblkProgress"
+                       Height="30"
+                       Margin="0,2,225,0"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Top"
+                       FontSize="21.333"><Run Text="00:00" />
+                <LineBreak /><Run />
+            </TextBlock>
+            <TextBlock x:Name="txtblkTo"
+                       Width="110"
+                       Margin="0,88.18,225,0"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Top"
+                       FlowDirection="RightToLeft"
+                       Text="To: 0:00" />
+            <TextBlock x:Name="txtblkFrom"
+                       Width="110"
+                       Margin="10,88.18,0,0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       Text="From: 0:00" />
             <Button x:Name="btnStop"
                     Width="25"
                     Height="25"
                     Margin="0,13,185,0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
+                    Click="btnStop_Click"
                     Content="Button"
                     IsEnabled="False"
                     RenderTransformOrigin="0.5,0.5"
@@ -248,12 +263,11 @@
                     </TransformGroup>
                 </Button.RenderTransform>
             </Button>
-            <Label x:Name="lblSongName"
-            	Margin="0,0,279.123,0"
-            	HorizontalAlignment="Right"
-            	VerticalAlignment="Top"
-            	Content=""
-            	FontSize="21.333" Width="502.876" />
+            <TextBlock x:Name="txtblkSongName"
+                       Height="38.373"
+                       Margin="10,1.5,279.123,0"
+                       VerticalAlignment="Top"
+                       FontSize="21.333" />
         </Grid>
         <Grid x:Name="FolderSelect"
               Height="49"
@@ -290,13 +304,16 @@
                   Margin="10,55,10,145"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
+                  ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}"
                   IsEnabled="False"
                   IsReadOnly="True"
                   ItemsSource="{Binding}"
-				  
-                  MouseDoubleClick="datagridPlaylistInfo_MouseDoubleClick" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}" Style="{DynamicResource DataGridStyle}">
+                  MouseDoubleClick="datagridPlaylistInfo_MouseDoubleClick"
+                  SelectionChanged="datagridPlaylistInfo_SelectionChanged"
+                  Style="{DynamicResource DataGridStyle}">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding FilePath}" Visibility="Hidden" />
+                <DataGridTextColumn Binding="{Binding Ticks}" Visibility="Hidden" />
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" />
                 <DataGridTextColumn Binding="{Binding Artist}" Header="Artist" />
                 <DataGridTextColumn Binding="{Binding Album}" Header="Album" />
