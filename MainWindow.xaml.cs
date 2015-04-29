@@ -20,12 +20,10 @@ using System.Threading;
 using System.Windows.Threading;
 using System.Windows.Media.Animation;
 using NAudio.Wave;
+using System.Diagnostics;
 
 namespace multimedia
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         int CurrentSongIndex = -1;
@@ -86,15 +84,56 @@ namespace multimedia
                                 su++;
                             }
                             filesize = Math.Round(filesize, 2);
+                            String name, artist, album,year,genre;
+                            try 
+	                        {	        
+		                        name = fileinfo.Properties.GetProperty(SystemProperties.System.Title).ValueAsObject.ToString();
+	                        }
+	                        catch (Exception)
+	                        {
+                                name = String.Empty;
+	                        }
+                            try 
+	                        {
+                                artist = fileinfo.Properties.GetProperty(SystemProperties.System.Music.DisplayArtist).ValueAsObject.ToString();
+	                        }
+	                        catch (Exception)
+	                        {
+                                artist = String.Empty;
+	                        }
+                            try
+                            {
+                                album = fileinfo.Properties.GetProperty(SystemProperties.System.Music.AlbumTitle).ValueAsObject.ToString();
+                            }
+                            catch (Exception)
+                            {
+                                album = String.Empty;
+                            }
+                            try
+                            {
+                                year = fileinfo.Properties.GetProperty(SystemProperties.System.Media.Year).ValueAsObject.ToString();
+                            }
+                            catch (Exception)
+                            {
+                                year = String.Empty;
+                            }
+                            try
+                            {
+                                genre = ((string[])fileinfo.Properties.GetProperty(SystemProperties.System.Music.Genre).ValueAsObject)[0];
+                            }
+                            catch (Exception)
+                            {
+                                genre = String.Empty;
+                            }
                             PlaylistData.Add(new DataItem
                             {
                                 FilePath = file,
                                 Ticks = UInt32.Parse(fileinfo.Properties.GetProperty(SystemProperties.System.Media.Duration).ValueAsObject.ToString()),
-                                Name = fileinfo.Properties.GetProperty(SystemProperties.System.Title).ValueAsObject.ToString(),
-                                Artist = fileinfo.Properties.GetProperty(SystemProperties.System.Music.DisplayArtist).ValueAsObject.ToString(),
-                                Album = fileinfo.Properties.GetProperty(SystemProperties.System.Music.AlbumTitle).ValueAsObject.ToString(),
-                                Year = fileinfo.Properties.GetProperty(SystemProperties.System.Media.Year).ValueAsObject.ToString(),
-                                Genre = ((string[])fileinfo.Properties.GetProperty(SystemProperties.System.Music.Genre).ValueAsObject)[0],
+                                Name = name,
+                                Artist = artist,
+                                Album = album,
+                                Year = year,
+                                Genre = genre,
                                 Format = fileinfo.Properties.GetProperty(SystemProperties.System.FileExtension).ValueAsObject.ToString().Substring(1),
                                 Duration = TimeSpan.FromTicks(UInt32.Parse(fileinfo.Properties.GetProperty(SystemProperties.System.Media.Duration).ValueAsObject.ToString())).ToString(@"mm\:ss"),
                                 Size = filesize.ToString() + " " + su.ToString(),
@@ -205,6 +244,8 @@ namespace multimedia
 
             txtblkSongName.Text = ((DataItem)datagridPlaylistInfo.Items[SongIndex]).Name;
             txtblkProgress.Text = "00:00";
+            txtblkFrom.Text = "From 00:00";
+            txtblkTo.Text = "To 00:00";
 
             CurrentSongIndex = SongIndex;
         }
@@ -299,6 +340,87 @@ namespace multimedia
             }
         }
 
+        //https://ffmpeg.org/ffmpeg.html
+        private void btnConvert_Click(object sender, RoutedEventArgs e)
+        {
+            if(waveOutDevice.PlaybackState != PlaybackState.Stopped && CurrentSongIndex != -1)
+            {
+                if (((DataItem)datagridPlaylistInfo.Items[CurrentSongIndex]).Format == "wav")
+                {
+                    if (sliderTo.Value > sliderFrom.Value)
+                    {
+                        btnPause_Click(sender, e);
+                        CommonSaveFileDialog dialog = new CommonSaveFileDialog();
+                        dialog.Filters.Add(new CommonFileDialogFilter("MP3 files","*.mp3"));
+                        dialog.Title = "Save MP3 file";
+                        CommonFileDialogResult result = dialog.ShowDialog();
+                        if (result == CommonFileDialogResult.Ok)
+                        {
+                            this.Cursor = System.Windows.Input.Cursors.Wait;
+                            ConvertingGrid.Visibility = Visibility.Visible;
+                            ((Storyboard)this.Resources["Converting"]).Begin(this, true);
+                            ((Storyboard)this.Resources["DisablePlayer"]).Begin();
+                            btnConvert.IsEnabled = btnBrowse.IsEnabled = false;
+                            String from = TimeSpan.FromTicks(UInt32.Parse(Math.Round(sliderFrom.Value).ToString())).ToString(@"hh\:mm\:ss\.fff");
+                            String to = TimeSpan.FromTicks(UInt32.Parse(Math.Round(sliderTo.Value).ToString())).ToString(@"hh\:mm\:ss\.fff");
+                            String filename = "\"" + dialog.FileName;
+                            if (dialog.FileName.Length < 3 || dialog.FileName.Substring(dialog.FileName.Length - 3) != "mp3")
+                                filename += ".mp3";
+                            filename += "\"";
+                            String args = String.Format("-i {0} -ss {1} -to {2} -vn -ar 44100 -ac 2 -ab 320k -f mp3 {3} -y", "\"" + ((DataItem)datagridPlaylistInfo.Items[CurrentSongIndex]).FilePath + "\"", from, to, filename);
+                            new Thread(() =>
+                            {
+                                var converter = new Process
+                                {
+                                    StartInfo = new ProcessStartInfo
+                                    {
+                                        FileName = "ffmpeg.exe",
+                                        Arguments = args,
+                                        UseShellExecute = false,
+                                        RedirectStandardOutput = true,
+                                        CreateNoWindow = true
+                                    }
+                                };
+                                converter.Start();
+                                converter.WaitForExit();
+                                Application.Current.Dispatcher.BeginInvoke(
+                                  DispatcherPriority.Send,
+                                  new Action(() =>
+                                  {
+                                      ((Storyboard)this.Resources["Converting"]).Stop(this);
+                                      ConvertingGrid.Visibility = Visibility.Collapsed;
+                                      ((Storyboard)this.Resources["EnablePlayer"]).Begin();
+                                      btnConvert.IsEnabled = btnBrowse.IsEnabled = true;
+                                      this.Cursor = System.Windows.Input.Cursors.Arrow;
+                                      new CustomMessageBox("Done converting").ShowDialog();
+                                  }));
+                            }).Start();
+                        }
+                    }
+                    else
+                    {
+                        new CustomMessageBox("Invalid from and to values").ShowDialog();
+                    }
+                }
+                else
+                {
+                    new CustomMessageBox("Only wav files can be converted").ShowDialog();
+                }
+                
+            }
+        }
+
+        private void sliderFrom_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if(txtblkFrom != null)
+                txtblkFrom.Text = "From " + TimeSpan.FromTicks(UInt32.Parse(Math.Round(sliderFrom.Value).ToString())).ToString(@"mm\:ss");
+        }
+
+        private void sliderTo_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if(txtblkTo != null)
+                txtblkTo.Text = "To " + TimeSpan.FromTicks(UInt32.Parse(Math.Round(sliderTo.Value).ToString())).ToString(@"mm\:ss");
+        }
     }
     public class DataItem
     {
@@ -324,5 +446,4 @@ namespace multimedia
         KB,
         B
     }
-
 }
