@@ -41,6 +41,9 @@
             <BooleanAnimationUsingKeyFrames Storyboard.TargetName="sliderTo" Storyboard.TargetProperty="(UIElement.IsEnabled)">
                 <DiscreteBooleanKeyFrame KeyTime="0" Value="True" />
             </BooleanAnimationUsingKeyFrames>
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetName="btnConvert" Storyboard.TargetProperty="(UIElement.IsEnabled)">
+                <DiscreteBooleanKeyFrame KeyTime="0" Value="True" />
+            </BooleanAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="Pause">
             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="btnPlay" Storyboard.TargetProperty="(UIElement.Visibility)">
@@ -104,12 +107,29 @@
                 <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}" />
             </ObjectAnimationUsingKeyFrames>
         </Storyboard>
+        <Storyboard x:Key="Converting" RepeatBehavior="Forever">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetName="ellipse1" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                <EasingColorKeyFrame KeyTime="0:0:0.5" Value="#FF6A6868" />
+                <EasingColorKeyFrame KeyTime="0:0:0.8" Value="#FF2E2F31" />
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetName="ellipse2" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                <EasingColorKeyFrame KeyTime="0:0:0.8" Value="#FF2E2F31" />
+                <EasingColorKeyFrame KeyTime="0:0:1.1" Value="#FF6A6868" />
+                <EasingColorKeyFrame KeyTime="0:0:1.4" Value="#FF2E2F31" />
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetName="ellipse3" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                <EasingColorKeyFrame KeyTime="0:0:1.4" Value="#FF2E2F31" />
+                <EasingColorKeyFrame KeyTime="0:0:1.7" Value="#FF6A6868" />
+                <EasingColorKeyFrame KeyTime="0:0:2" Value="#FF2E2F31" />
+            </ColorAnimationUsingKeyFrames>
+        </Storyboard>
     </Window.Resources>
     <Window.Triggers>
         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
             <BeginStoryboard x:Name="EnablePlayer_BeginStoryboard" Storyboard="{StaticResource EnablePlayer}" />
             <BeginStoryboard Storyboard="{StaticResource DisablePlayer}" />
             <BeginStoryboard Storyboard="{StaticResource Stop}" />
+            <BeginStoryboard Storyboard="{StaticResource Converting}" />
         </EventTrigger>
     </Window.Triggers>
     <Grid>
@@ -137,19 +157,21 @@
                     Margin="0,0,10,0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
+                    Click="btnNext_Click"
                     Content="Button"
                     IsEnabled="False"
-                    Style="{DynamicResource NextButton}" Click="btnNext_Click" />
+                    Style="{DynamicResource NextButton}" />
             <Button x:Name="btnPrev"
                     Width="50"
                     Height="50"
                     Margin="0,0,120,0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
+                    Click="btnPrev_Click"
                     Content="Button"
                     IsEnabled="False"
                     RenderTransformOrigin="0.5,0.5"
-                    Style="{DynamicResource NextButton}" Click="btnPrev_Click">
+                    Style="{DynamicResource NextButton}">
                 <Button.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform />
@@ -186,7 +208,8 @@
                     IsEnabled="False"
                     Maximum="1"
                     RenderTransformOrigin="0.5,0.5"
-                    Style="{DynamicResource Horizontal_Slider1}">
+                    Style="{DynamicResource Horizontal_Slider1}"
+                    ValueChanged="sliderFrom_ValueChanged">
                 <Slider.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleX="1" ScaleY="-1" />
@@ -203,6 +226,7 @@
                     Maximum="1"
                     RenderTransformOrigin="0.5,0.5"
                     Style="{DynamicResource Horizontal_Slider1}"
+                    ValueChanged="sliderTo_ValueChanged"
                     Value="1">
                 <Slider.RenderTransform>
                     <TransformGroup>
@@ -219,6 +243,7 @@
                     Margin="0,0,10,10"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
+                    Click="btnConvert_Click"
                     Content="Convert"
                     IsEnabled="False"
                     Style="{DynamicResource NormalButton}" />
@@ -364,6 +389,44 @@
                        FontWeight="Bold"
                        Foreground="#FF2E2F31"
                        Text="Loading"
+                       TextWrapping="Wrap" />
+        </Grid>
+        <Grid x:Name="ConvertingGrid"
+              Width="480.5"
+              Height="60"
+              Margin="197.25,220,114.25,290"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center"
+              Visibility="Collapsed">
+            <Ellipse x:Name="ellipse1"
+                     Width="60"
+                     Margin="283.403,0,0,0"
+                     HorizontalAlignment="Left"
+                     Fill="#FF2E2F31"
+                     Stroke="#FF2E2F31"
+                     StrokeThickness="3" />
+            <Ellipse x:Name="ellipse2"
+                     Width="60"
+                     Margin="413.404,0,0,0"
+                     HorizontalAlignment="Left"
+                     Fill="#FF2E2F31"
+                     Stroke="#FF2E2F31"
+                     StrokeThickness="3" />
+            <Ellipse x:Name="ellipse3"
+                     Width="60"
+                     Margin="348.404,0,0,0"
+                     HorizontalAlignment="Left"
+                     Fill="#FF2E2F31"
+                     Stroke="#FF2E2F31"
+                     StrokeThickness="3" />
+            <TextBlock Margin="8,0,0,0.8"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       FontFamily="Manteka"
+                       FontSize="50"
+                       FontWeight="Bold"
+                       Foreground="#FF2E2F31"
+                       Text="Converting"
                        TextWrapping="Wrap" />
         </Grid>
     </Grid>
