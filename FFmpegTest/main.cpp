@@ -164,13 +164,20 @@ void audio_encode_example(char*inputfile, char *filename)
     // frame will contain the audio raw values
     ptr_frame = av_frame_alloc();
 
+    FILE * r = fopen(inputfile, "rb");
+    unsigned char buffer [44];
+    fread(buffer, sizeof(unsigned char), 44, r);
+    fclose(r);
+    fwrite(buffer, 1, 44, f);
 
     // start decoding
-    av_read_frame(ptr_format_context, &pkt);
-   // {
+    while (av_read_frame(ptr_format_context, &pkt) == 0)
+
+    {
         //avcodec_decode_audio4(ptr_codec_context, ptr_frame, &got_output, &pkt);
+
         fwrite(pkt.data, 1, pkt.size, f);
-    //}
+    }
 
     //ptr_frame->channels = ptr_codec_context->channels;
     //ptr_frame->format = ptr_codec_context->sample_fmt;
