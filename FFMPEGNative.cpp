@@ -693,7 +693,7 @@ cleanup:
 }
 
 // Gets the meta data of a given media file
-int get_media_file_meta_data(char* file_name)
+char ** get_media_file_meta_data(char* file_name)
 {
 	AVFormatContext *file_context = NULL;
 	AVDictionaryEntry *tag = NULL;

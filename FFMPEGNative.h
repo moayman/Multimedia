@@ -110,6 +110,6 @@ int convert_wav_to_mp3(char* input_file, char* output_file);
 
 // Gets the meta data of a given media file
 // TODO: return a complex object of key value pairs
-int get_media_file_meta_data(char* file_name);
+char** get_media_file_meta_data(char* file_name);
 };
 
