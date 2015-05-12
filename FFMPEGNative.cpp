@@ -3,6 +3,7 @@
 
 FFMPEGNative::FFMPEGNative(void)
 {
+	av_register_all();
 }
 
 
@@ -576,8 +577,6 @@ int FFMPEGNative ::   convert_wav_to_mp3(char* input_file, char* output_file)
 
     // return code
     int ret = AVERROR_EXIT;
-
-    av_register_all();
 
     // Open the input file for reading
 	if (open_input_file(input_file, &input_format_context, &input_codec_context))
