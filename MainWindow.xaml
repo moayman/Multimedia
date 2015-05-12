@@ -9,6 +9,21 @@
         Icon="icon.png"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
+        <Storyboard x:Key="PlaylistHide" >
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="datagridPlaylistInfo" Storyboard.TargetProperty="Margin" BeginTime="00:00:00">                
+                <SplineThicknessKeyFrame KeyTime="00:00:01" Value="550 ,55,10,145" />
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="PlaylistShow" >
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="datagridPlaylistInfo" Storyboard.TargetProperty="Margin" BeginTime="00:00:00">
+                <SplineThicknessKeyFrame KeyTime="00:00:01" Value="10,55,10,145" />
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="PlayerShow" >
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="Player" Storyboard.TargetProperty="Margin" BeginTime="00:00:00">
+                <SplineThicknessKeyFrame KeyTime="00:00:01" Value="10,55,10,145" />
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
         <Storyboard x:Key="Loading" RepeatBehavior="Forever">
             <ColorAnimationUsingKeyFrames Storyboard.TargetName="ellipse16" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
                 <EasingColorKeyFrame KeyTime="0:0:0.5" Value="#FF6A6868" />
@@ -123,6 +138,7 @@
                 <EasingColorKeyFrame KeyTime="0:0:2" Value="#FF2E2F31" />
             </ColorAnimationUsingKeyFrames>
         </Storyboard>
+        
     </Window.Resources>
     <Window.Triggers>
         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
@@ -133,6 +149,26 @@
         </EventTrigger>
     </Window.Triggers>
     <Grid>
+        <Grid x:Name="Player"
+               Margin="10,55,300,145">
+            <MediaElement Name ="PLR" 
+                          LoadedBehavior="Manual"  
+                          
+                          IsMuted="True" 
+                         >
+                <MediaElement.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </MediaElement.RenderTransform>
+            </MediaElement>
+
+        </Grid>
+              
+              
         <Grid x:Name="PlayerAndConverter"
               Height="119.14"
               Margin="0,0,0,10"
@@ -335,7 +371,7 @@
                   ItemsSource="{Binding}"
                   MouseDoubleClick="datagridPlaylistInfo_MouseDoubleClick"
                   SelectionChanged="datagridPlaylistInfo_SelectionChanged"
-                  Style="{DynamicResource DataGridStyle}">
+                  Style="{DynamicResource DataGridStyle}" ScrollViewer.CanContentScroll="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding FilePath}" Visibility="Hidden" />
                 <DataGridTextColumn Binding="{Binding Ticks}" Visibility="Hidden" />
