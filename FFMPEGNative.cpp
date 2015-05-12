@@ -691,3 +691,22 @@ cleanup:
 
     return ret;
 }
+
+// Gets the meta data of a given media file
+int get_media_file_meta_data(char* file_name)
+{
+	AVFormatContext *file_context = NULL;
+	AVDictionaryEntry *tag = NULL;
+	int ret = -1;
+	
+	ret = avformat_open_input(&file_context, file_name, NULL, NULL);
+	
+	if (ret != 0)
+		return ret;
+	
+	while ((tag = av_dict_get(file_context->metadata, "", tag, AV_DICT_IGNORE_SUFFIX)))
+        printf("%s=%s\n", tag->key, tag->value);
+	
+	avformat_close_input(&fmt_ctx);
+	return 0;
+}

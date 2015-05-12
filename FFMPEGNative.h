@@ -14,6 +14,7 @@ extern "C" {
 #include "libavutil\avstring.h"
 #include "libavutil\avutil.h"
 #include "libavutil\audio_fifo.h"
+#include "libavutil/dict.h"
 
 #include "libswresample\swresample.h"
 
@@ -106,5 +107,9 @@ int write_output_file_trailer(AVFormatContext *output_format_context);
 
 public :
 int convert_wav_to_mp3(char* input_file, char* output_file);
+
+// Gets the meta data of a given media file
+// TODO: return a complex object of key value pairs
+int get_media_file_meta_data(char* file_name);
 };
 
