@@ -148,23 +148,24 @@ namespace multimedia
                             }
                             try
                             {
-                                
+
                                 ticks = UInt32.Parse(fileinfo.Properties.GetProperty(SystemProperties.System.Media.Duration).ValueAsObject.ToString());
-                                ticks = 0;
+                               // ticks = 0;
                             }
                             catch(Exception)
                             {
 
-                                /*try
+                                try
                                 {
-                                    ticks = (UInt32)(Math.Sqrt(ulong.Parse(fileinfo.Properties.GetProperty(SystemProperties.System.Media.Duration).ValueAsObject.ToString())) * ulong.Parse(fileinfo.Properties.GetProperty(SystemProperties.System.Media.Duration).ValueAsObject.ToString()));
-
+                                    
+                                    ticks=(UInt32)(1 * ulong.Parse(fileinfo.Properties.GetProperty(SystemProperties.System.Media.Duration).ValueAsObject.ToString()));
+                                    System.Console.WriteLine(ulong.Parse(fileinfo.Properties.GetProperty(SystemProperties.System.Media.Duration).ValueAsObject.ToString()));
                                 }
                                 catch (Exception)
                                 {
                                     ticks = 0;
-                                }*/
-                                ticks = 0;
+                                }
+                                
                             }
                             try
                             {
@@ -218,8 +219,8 @@ namespace multimedia
 
                 ((Storyboard)this.Resources["Play"]).Begin();
 
-               // waveOutDevice.Play();
-               // PLR.Play();
+                waveOutDevice.Play();
+                PLR.Play();
             }
         }
 
@@ -300,18 +301,12 @@ namespace multimedia
             }
             waveOutDevice = new WaveOut();
             System.Console.WriteLine(SongIndex);
-            try
-            {
-                audioFileReader = new AudioFileReader(((DataItem)datagridPlaylistInfo.Items[SongIndex]).FilePath);
-            }
-            catch (Exception E)
-            {
-                System.Console.WriteLine(E.ToString()+"\n================\n");
-            }
             
+            audioFileReader = new AudioFileReader(((DataItem)datagridPlaylistInfo.Items[SongIndex]).FilePath);
+
             waveOutDevice.Init(audioFileReader);
            
-            sliderFrom.Maximum = sliderProgress.Maximum = sliderTo.Maximum = Math.Sqrt(((DataItem)datagridPlaylistInfo.Items[SongIndex]).Ticks);
+            sliderFrom.Maximum = sliderProgress.Maximum = sliderTo.Maximum = ((DataItem)datagridPlaylistInfo.Items[SongIndex]).Ticks;
             sliderFrom.Value = sliderProgress.Value = 0;
             sliderTo.Value = sliderTo.Maximum;
             
