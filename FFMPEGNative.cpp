@@ -699,14 +699,23 @@ char ** get_media_file_meta_data(char* file_name)
 	AVDictionaryEntry *tag = NULL;
 	int ret = -1;
 	
+	// see https://www.ffmpeg.org/doxygen/1.2/group__metadata__api.html
+	int number_of_data = 21;
+	
+	// allocate array of 21 strings
+	char ** array = malloc(sizeof(char*) * number_of_data);
+	
 	ret = avformat_open_input(&file_context, file_name, NULL, NULL);
 	
+	// FIXME: return NULL or array?
 	if (ret != 0)
-		return ret;
+		return NULL;
 	
 	while ((tag = av_dict_get(file_context->metadata, "", tag, AV_DICT_IGNORE_SUFFIX)))
+	{
         printf("%s=%s\n", tag->key, tag->value);
+	}
 	
 	avformat_close_input(&fmt_ctx);
-	return 0;
+	return array;
 }
