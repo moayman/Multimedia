@@ -703,7 +703,7 @@ char ** get_media_file_meta_data(char* file_name)
 	int number_of_data = 21;
 	
 	// allocate array of 21 strings
-	char ** array = malloc(sizeof(char*) * number_of_data);
+	char ** arr = (char **)malloc(sizeof(char*) * number_of_data);
 	
 	ret = avformat_open_input(&file_context, file_name, NULL, NULL);
 	
@@ -717,5 +717,5 @@ char ** get_media_file_meta_data(char* file_name)
 	}
 	
 	avformat_close_input(&fmt_ctx);
-	return array;
+	return arr;
 }
