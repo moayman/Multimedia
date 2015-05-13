@@ -108,8 +108,16 @@ int write_output_file_trailer(AVFormatContext *output_format_context);
 public :
 int convert_wav_to_mp3(char* input_file, char* output_file);
 
-// Gets the meta data of a given media file
-// TODO: return a complex object of key value pairs
+/*
+*	Gets the meta data of a given media file
+*	the function return the meta data as a sequence of key, value pairs
+*	to make it easy for converting it to managed c# format
+*	the function output ends with a 'end' flag.
+*
+*	For example, the user must iterate through the returned string array
+*	and stop when an "end" is found.
+*	Each time use two successive values for a metadata entry
+*/
 char** get_media_file_meta_data(char* file_name);
 };
 

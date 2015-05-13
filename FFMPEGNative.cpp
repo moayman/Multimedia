@@ -692,30 +692,85 @@ cleanup:
     return ret;
 }
 
-// Gets the meta data of a given media file
-char ** get_media_file_meta_data(char* file_name)
+/*
+*	Gets the meta data of a given media file
+*	the function return the meta data as a sequence of key, value pairs
+*	to make it easy for converting it to managed c# format
+*	the function output ends with a 'end' flag.
+*
+*	For example, the user must iterate through the returned string array
+*	and stop when an "end" is found.
+*	Each time use two successive values for a metadata entry
+*/
+char ** FFMPEGNative ::get_media_file_meta_data(char* file_name)
 {
 	AVFormatContext *file_context = NULL;
 	AVDictionaryEntry *tag = NULL;
 	int ret = -1;
 	
 	// see https://www.ffmpeg.org/doxygen/1.2/group__metadata__api.html
-	int number_of_data = 21;
+	int number_of_data = 45;
 	
-	// allocate array of 21 strings
+	// allocate array of 45 strings
 	char ** arr = (char **)malloc(sizeof(char*) * number_of_data);
 	
 	ret = avformat_open_input(&file_context, file_name, NULL, NULL);
 	
 	// FIXME: return NULL or array?
 	if (ret != 0)
-		return NULL;
-	
+	{
+		printf("%s\n",get_error_text(ret));
+		goto finnish;
+	}
+
+	avformat_find_stream_info(file_context, NULL);
+
+	// FIXME: return NULL or array?
+	if (ret != 0)
+	{
+		printf("%s\n",get_error_text(ret));
+		goto finnish;
+	}
+
+	int tag_number = 0;
 	while ((tag = av_dict_get(file_context->metadata, "", tag, AV_DICT_IGNORE_SUFFIX)))
 	{
-        printf("%s=%s\n", tag->key, tag->value);
+        //printf("%s=%s\n", tag->key, tag->value);
+		arr[tag_number] = (char *) malloc(strlen(tag->key));
+		strcpy(arr[tag_number], tag->key);
+		tag_number++;
+		arr[tag_number] = (char *) malloc(strlen(tag->value));
+		strcpy(arr[tag_number], tag->value);
+		tag_number++;
 	}
+
+	// add bitrate
+	arr[tag_number] = (char *) malloc(7);
+	strcpy(arr[tag_number], "bitrate");
+	tag_number++;
+	arr[tag_number] = (char*)malloc(10);
+	itoa(file_context->bit_rate, arr[tag_number], 10);
+	tag_number++;
+
+	// add channels number
+	if (file_context->nb_streams > 0)
+	{
+		arr[tag_number] = (char *) malloc(8);
+		strcpy(arr[tag_number], "channels");
+		tag_number++;
+		arr[tag_number] = (char*)malloc(1);
+		itoa(file_context->streams[0]->codec->channels, arr[tag_number], 10);
+		tag_number++;
+	}
+
+	// TODO: add more data as required
 	
-	avformat_close_input(&fmt_ctx);
+
+finnish:
+	// put the end flag
+	arr[tag_number] = (char *) malloc(3);
+	strcpy(arr[tag_number], "end");
+
+	avformat_close_input(&file_context);
 	return arr;
 }
