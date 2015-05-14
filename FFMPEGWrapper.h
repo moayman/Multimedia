@@ -15,6 +15,7 @@ namespace FFMPEGWrapper {
 		Wrapper();
 		~Wrapper();
 		int wrap_convert_wav_to_mp3(char* input_file, char* output_file);
+		char** wrap_get_media_file_meta_data(char* file_name);
 	private:
 		FFMPEGNative * FNative;
 	};

@@ -12,39 +12,6 @@ namespace dlltrial
         static void Main(string[] args)
         {
             Wrapper W1 = new Wrapper();
-            
-            //SecureString secureinput = new SecureString();
-            //string input = "song.wav";
-            //foreach (char c in input)
-            //    secureinput.AppendChar(c);
-            //SecureString secureoutput = new SecureString();
-            //string output = "song.mp3";
-            //foreach (char c in output)
-            //    secureoutput.AppendChar(c);
-
-            
-            
-            
-            
-            
-            
-            
-            //byte[] bytes = Encoding.ASCII.GetBytes("song.wav");
-            ////convert it to sbyte array
-            //sbyte[] inputfilename = new sbyte[bytes.Length];
-            //for (int i = 0; i < bytes.Length; i++)
-            //    inputfilename[i] = (sbyte)bytes[i];
-
-            //bytes = Encoding.ASCII.GetBytes("song.mp3");
-            //sbyte[] outputfilename = new sbyte[bytes.Length];
-            //for (int i = 0; i < bytes.Length; i++)
-            //    inputfilename[i] = (sbyte)bytes[i];
-
-
-
-
-
-
             string str = "song.wav";
             byte[] bytes = Encoding.ASCII.GetBytes(str);
             string str2 = "song.mp3";
@@ -56,12 +23,17 @@ namespace dlltrial
                 {
                     sbyte* inputfile = (sbyte*)p;
                     sbyte* outputfile = (sbyte*)p2;
-                    W1.wrap_convert_wav_to_mp3(inputfile, outputfile);
+                    sbyte** metadata = W1.wrap_get_media_file_meta_data(inputfile);
+                    int i = 0;
+                    while(true)
+                    {
+                        String s1 = new String(metadata[i++]);
+                        Console.WriteLine(s1);
+                        if (s1 == "end") break;
+                    }
+                    //W1.wrap_convert_wav_to_mp3(inputfile, outputfile);
                 }
-
-                
             }
-           
         }
     }
 }
