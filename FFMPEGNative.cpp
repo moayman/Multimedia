@@ -1,5 +1,5 @@
 #include "FFMPEGNative.h"
-
+#include <sstream>
 
 FFMPEGNative::FFMPEGNative(void)
 {
@@ -706,6 +706,7 @@ char ** FFMPEGNative ::get_media_file_meta_data(char* file_name)
 {
 	AVFormatContext *file_context = NULL;
 	AVDictionaryEntry *tag = NULL;
+	std::stringstream str;
 	int ret = -1;
 	
 	// see https://www.ffmpeg.org/doxygen/1.2/group__metadata__api.html
@@ -762,6 +763,21 @@ char ** FFMPEGNative ::get_media_file_meta_data(char* file_name)
 		itoa(file_context->streams[0]->codec->channels, arr[tag_number], 10);
 		tag_number++;
 	}
+
+	// add duration
+	uint64_t s = file_context->duration / AV_TIME_BASE ;
+	int minutes = s / 60;
+	int hours = minutes / 60;
+	s = s % 60;
+	arr[tag_number] = (char *) malloc(8);
+	strcpy(arr[tag_number], "duration");
+	tag_number++;
+	
+	str << hours << ':' << minutes << ':' << s;
+	
+	arr[tag_number] = (char *) malloc(8);
+	strcpy(arr[tag_number], str.str().c_str());
+	tag_number++;
 
 	// TODO: add more data as required
 	
