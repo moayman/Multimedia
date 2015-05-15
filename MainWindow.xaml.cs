@@ -21,6 +21,7 @@ using System.Windows.Threading;
 using System.Windows.Media.Animation;
 using NAudio.Wave;
 using System.Diagnostics;
+using TagLib;
 
 namespace multimedia
 {
@@ -59,8 +60,8 @@ namespace multimedia
                 CurrentSongIndex = -1;
                 datagridPlaylistInfo.Items.Refresh();
                 new Thread(() => 
-                {   
-                    String[] files = Directory.GetFiles(FolderName, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".mp3") || s.EndsWith(".wav")).Cast<String>().ToArray();
+                {
+                    String[] files = Directory.GetFiles(FolderName, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".mp3") || s.EndsWith(".wav") || s.EndsWith(".mp4")).Cast<String>().ToArray();
                     if (files.Length != 0)
                     {
                         Application.Current.Dispatcher.BeginInvoke(
@@ -127,14 +128,14 @@ namespace multimedia
                             PlaylistData.Add(new DataItem
                             {
                                 FilePath = file,
-                                Ticks = UInt64.Parse(fileinfo.Properties.GetProperty(SystemProperties.System.Media.Duration).ValueAsObject.ToString()),
+                                Ticks = Int64.Parse(fileinfo.Properties.GetProperty(SystemProperties.System.Media.Duration).ValueAsObject.ToString()),
                                 Name = name,
                                 Artist = artist,
                                 Album = album,
                                 Year = year,
                                 Genre = genre,
                                 Format = fileinfo.Properties.GetProperty(SystemProperties.System.FileExtension).ValueAsObject.ToString().Substring(1),
-                                Duration = TimeSpan.FromTicks(UInt32.Parse(fileinfo.Properties.GetProperty(SystemProperties.System.Media.Duration).ValueAsObject.ToString())).ToString(@"mm\:ss"),
+                                Duration = TimeSpan.FromTicks(Int64.Parse(fileinfo.Properties.GetProperty(SystemProperties.System.Media.Duration).ValueAsObject.ToString())).ToString(@"mm\:ss"),
                                 Size = filesize.ToString() + " " + su.ToString(),
                                 Bitrate = (Int32.Parse(fileinfo.Properties.GetProperty(SystemProperties.System.Audio.EncodingBitrate).ValueAsObject.ToString()) / 1000).ToString() + " Kbps",
                                 SampleRate = (Int32.Parse(fileinfo.Properties.GetProperty(SystemProperties.System.Audio.SampleRate).ValueAsObject.ToString()) / 1000).ToString() + " KHz",
@@ -142,16 +143,16 @@ namespace multimedia
                             });
 
                         }
-                        Application.Current.Dispatcher.BeginInvoke(
-                          DispatcherPriority.Send,
-                          new Action(() =>
-                          {
-                              datagridPlaylistInfo.Items.Refresh();
-                              ((Storyboard)this.Resources["Loading"]).Stop(this);
-                              LoadingGrid.Visibility = Visibility.Collapsed;
-                              this.Cursor = System.Windows.Input.Cursors.Arrow;
-                          }));
                     }
+                    Application.Current.Dispatcher.BeginInvoke(
+                        DispatcherPriority.Send,
+                        new Action(() =>
+                        {
+                            datagridPlaylistInfo.Items.Refresh();
+                            ((Storyboard)this.Resources["Loading"]).Stop(this);
+                            LoadingGrid.Visibility = Visibility.Collapsed;
+                            this.Cursor = System.Windows.Input.Cursors.Arrow;
+                        }));
                 }).Start();
             }
         }
@@ -167,6 +168,7 @@ namespace multimedia
 
                 ((Storyboard)this.Resources["Play"]).Begin();
 
+                mediaelmntVideoPlayer.Play();
                 waveOutDevice.Play();
             }
         }
@@ -176,6 +178,7 @@ namespace multimedia
             if (waveOutDevice != null)
             {
                 waveOutDevice.Pause();
+                mediaelmntVideoPlayer.Pause();
 
                 ((Storyboard)this.Resources["Pause"]).Begin();
             }
@@ -197,15 +200,19 @@ namespace multimedia
                     PreparePlay(datagridPlaylistInfo.SelectedIndex);
 
                 ((Storyboard)this.Resources["Play"]).Begin();
-                
+
+                mediaelmntVideoPlayer.Play();
                 waveOutDevice.Play();
             }
         }
 
         private void btnStop_Click(object sender, RoutedEventArgs e)
         {
+            PlayerImage.Source = new BitmapImage(new Uri(@"melody.png", UriKind.Relative));
+
             if(waveOutDevice != null)
                 waveOutDevice.Stop();
+            mediaelmntVideoPlayer.Stop();
 
             txtblkSongName.Text = String.Empty;
             txtblkProgress.Text = "00:00";
@@ -232,6 +239,30 @@ namespace multimedia
 
         private void PreparePlay(int SongIndex)
         {
+            if (((DataItem)datagridPlaylistInfo.Items[SongIndex]).Format == "mp4")
+            {
+                mediaelmntVideoPlayer.Source = new Uri(((DataItem)datagridPlaylistInfo.Items[SongIndex]).FilePath);
+                PlayerImage.Source = new BitmapImage(new Uri(@"melody.png", UriKind.Relative));
+            }
+            else
+            {
+                mediaelmntVideoPlayer.Stop();
+
+                var file = TagLib.File.Create(((DataItem)datagridPlaylistInfo.Items[SongIndex]).FilePath);
+                try
+                {
+                    var bin = (byte[])(file.Tag.Pictures[0].Data.Data);
+                    BitmapImage albumart = new BitmapImage();
+                    albumart.BeginInit();
+                    albumart.StreamSource = new MemoryStream(bin);
+                    albumart.EndInit();
+                    PlayerImage.Source = albumart;
+                }
+                catch (Exception)
+                {
+                }
+            }
+
             waveOutDevice = new WaveOut();
             audioFileReader = new AudioFileReader(((DataItem)datagridPlaylistInfo.Items[SongIndex]).FilePath);
 
@@ -424,7 +455,7 @@ namespace multimedia
     public class DataItem
     {
         public string FilePath { get; set; }
-        public UInt64 Ticks { get; set; }
+        public Int64 Ticks { get; set; }
         public string Name { get; set; }
         public string Artist { get; set; }
         public string Album { get; set; }
