@@ -28,7 +28,6 @@ namespace multimedia
     {
         int CurrentSongIndex = -1;
         bool DraggingProgress = false;
-
         IWavePlayer waveOutDevice;
         AudioFileReader audioFileReader;
         DispatcherTimer ProgressUpdater;
@@ -91,7 +90,7 @@ namespace multimedia
 	                        }
 	                        catch (Exception)
 	                        {
-                                name = String.Empty;
+                                name = System.IO.Path.GetFileNameWithoutExtension(file);
 	                        }
                             try 
 	                        {
@@ -128,7 +127,7 @@ namespace multimedia
                             PlaylistData.Add(new DataItem
                             {
                                 FilePath = file,
-                                Ticks = UInt32.Parse(fileinfo.Properties.GetProperty(SystemProperties.System.Media.Duration).ValueAsObject.ToString()),
+                                Ticks = UInt64.Parse(fileinfo.Properties.GetProperty(SystemProperties.System.Media.Duration).ValueAsObject.ToString()),
                                 Name = name,
                                 Artist = artist,
                                 Album = album,
@@ -425,7 +424,7 @@ namespace multimedia
     public class DataItem
     {
         public string FilePath { get; set; }
-        public uint Ticks { get; set; }
+        public UInt64 Ticks { get; set; }
         public string Name { get; set; }
         public string Artist { get; set; }
         public string Album { get; set; }
