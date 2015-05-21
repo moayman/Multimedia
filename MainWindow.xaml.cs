@@ -84,7 +84,7 @@ namespace multimedia
                                 su++;
                             }
                             filesize = Math.Round(filesize, 2);
-                            String name, artist, album,year,genre;
+                            String name, artist, album,year,genre,bitrate,samplerate,channels;
                             try 
 	                        {	        
 		                        name = fileinfo.Properties.GetProperty(SystemProperties.System.Title).ValueAsObject.ToString();
@@ -125,6 +125,30 @@ namespace multimedia
                             {
                                 genre = String.Empty;
                             }
+                            try
+                            {
+                                bitrate = (Int32.Parse(fileinfo.Properties.GetProperty(SystemProperties.System.Audio.EncodingBitrate).ValueAsObject.ToString()) / 1000).ToString() + " Kbps";
+                            }
+                            catch (Exception)
+                            {
+                                bitrate = String.Empty;
+                            }
+                            try
+                            {
+                                samplerate = (Int32.Parse(fileinfo.Properties.GetProperty(SystemProperties.System.Audio.SampleRate).ValueAsObject.ToString()) / 1000).ToString() + " KHz";
+                            }
+                            catch (Exception)
+                            {
+                                samplerate = String.Empty;
+                            }
+                            try
+                            {
+                                channels = fileinfo.Properties.GetProperty(SystemProperties.System.Audio.ChannelCount).ValueAsObject.ToString();
+                            }
+                            catch (Exception)
+                            {
+                                channels = String.Empty;
+                            }
                             PlaylistData.Add(new DataItem
                             {
                                 FilePath = file,
@@ -137,9 +161,9 @@ namespace multimedia
                                 Format = fileinfo.Properties.GetProperty(SystemProperties.System.FileExtension).ValueAsObject.ToString().Substring(1),
                                 Duration = TimeSpan.FromTicks(Int64.Parse(fileinfo.Properties.GetProperty(SystemProperties.System.Media.Duration).ValueAsObject.ToString())).ToString(@"mm\:ss"),
                                 Size = filesize.ToString() + " " + su.ToString(),
-                                Bitrate = (Int32.Parse(fileinfo.Properties.GetProperty(SystemProperties.System.Audio.EncodingBitrate).ValueAsObject.ToString()) / 1000).ToString() + " Kbps",
-                                SampleRate = (Int32.Parse(fileinfo.Properties.GetProperty(SystemProperties.System.Audio.SampleRate).ValueAsObject.ToString()) / 1000).ToString() + " KHz",
-                                Channels = fileinfo.Properties.GetProperty(SystemProperties.System.Audio.ChannelCount).ValueAsObject.ToString()
+                                Bitrate = bitrate,
+                                SampleRate = samplerate,
+                                Channels = channels
                             });
 
                         }
@@ -247,6 +271,7 @@ namespace multimedia
             else
             {
                 mediaelmntVideoPlayer.Stop();
+                mediaelmntVideoPlayer.Source = null;
 
                 var file = TagLib.File.Create(((DataItem)datagridPlaylistInfo.Items[SongIndex]).FilePath);
                 try
@@ -284,7 +309,11 @@ namespace multimedia
         {
             if (DraggingProgress && waveOutDevice.PlaybackState == PlaybackState.Paused)
             {
-                uint Progress = UInt32.Parse(Math.Round(sliderProgress.Value).ToString());
+                Int64 Progress = Int64.Parse(Math.Round(sliderProgress.Value).ToString());
+                if (((DataItem)datagridPlaylistInfo.Items[CurrentSongIndex]).Format == "mp4")
+                {
+                    mediaelmntVideoPlayer.Position = TimeSpan.FromTicks(Progress);
+                }
                 audioFileReader.CurrentTime = TimeSpan.FromTicks(Progress);
                 txtblkProgress.Text = audioFileReader.CurrentTime.ToString(@"mm\:ss");
             }
@@ -391,8 +420,8 @@ namespace multimedia
                             ((Storyboard)this.Resources["Converting"]).Begin(this, true);
                             ((Storyboard)this.Resources["DisablePlayer"]).Begin();
                             btnConvert.IsEnabled = btnBrowse.IsEnabled = false;
-                            String from = TimeSpan.FromTicks(UInt32.Parse(Math.Round(sliderFrom.Value).ToString())).ToString(@"hh\:mm\:ss\.fff");
-                            String to = TimeSpan.FromTicks(UInt32.Parse(Math.Round(sliderTo.Value).ToString())).ToString(@"hh\:mm\:ss\.fff");
+                            String from = TimeSpan.FromTicks(Int64.Parse(Math.Round(sliderFrom.Value).ToString())).ToString(@"hh\:mm\:ss\.fff");
+                            String to = TimeSpan.FromTicks(Int64.Parse(Math.Round(sliderTo.Value).ToString())).ToString(@"hh\:mm\:ss\.fff");
                             String filename = "\"" + dialog.FileName;
                             if (dialog.FileName.Length < 3 || dialog.FileName.Substring(dialog.FileName.Length - 3) != "mp3")
                                 filename += ".mp3";
@@ -443,13 +472,13 @@ namespace multimedia
         private void sliderFrom_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if(txtblkFrom != null)
-                txtblkFrom.Text = "From " + TimeSpan.FromTicks(UInt32.Parse(Math.Round(sliderFrom.Value).ToString())).ToString(@"mm\:ss");
+                txtblkFrom.Text = "From " + TimeSpan.FromTicks(Int64.Parse(Math.Round(sliderFrom.Value).ToString())).ToString(@"mm\:ss");
         }
 
         private void sliderTo_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if(txtblkTo != null)
-                txtblkTo.Text = "To " + TimeSpan.FromTicks(UInt32.Parse(Math.Round(sliderTo.Value).ToString())).ToString(@"mm\:ss");
+                txtblkTo.Text = "To " + TimeSpan.FromTicks(Int64.Parse(Math.Round(sliderTo.Value).ToString())).ToString(@"mm\:ss");
         }
     }
     public class DataItem
